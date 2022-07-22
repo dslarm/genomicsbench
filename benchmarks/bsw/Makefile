@@ -35,6 +35,14 @@ CXX=		g++
 
 ARCH_FLAGS=	-msse4.1
 
+uname_arch := $(shell uname -m)
+
+SIMDE_ARCH_FLAGS=-D__SSE2__=1 -D__AVX__=1 -D__SSE4_1__=1
+SIMDE_INCLUDES=-I$(BWAMEM2_PATH)/ext/simde
+
+BWAMEM2_PATH=../../tools/bwa-mem2
+INCLUDES=
+
 ifeq ($(arch),sse41)
 	ARCH_FLAGS=-msse4.1
 else ifeq ($(arch),avx2)
@@ -50,15 +58,29 @@ else ifeq ($(arch),avx512)
 		ARCH_FLAGS=-mavx512bw
 	endif
 else ifeq ($(arch),native)
-		ARCH_FLAGS=-march=native
+        ifeq ($(uname_arch),aarch64)
+                ARCH_FLAGS=-march=native $(SIMDE_ARCH_FLAGS)
+                INCLUDES+= $(SIMDE_INCLUDES)
+        else
+                ARCH_FLAGS=-march=native
+        endif
 else ifneq ($(arch),)
-	## To provide a different architecture flag like -march=core-avx2.
-		ARCH_FLAGS=$(arch)
+# To provide a different architecture flag like -march=core-avx2 or  -march=armv8.2-a
+        ifeq ($(uname_arch),aarch64)
+                ARCH_FLAGS=-march=$(arch) $(SIMDE_ARCH_FLAGS)
+                INCLUDES+= $(SIMDE_INCLUDES)
+        else
+		ARCH_FLAGS=-march=$(arch)
+	endif
+else
+        ifeq ($(uname_arch),aarch64)
+                ARCH_FLAGS=$(SIMDE_ARCH_FLAGS)
+                INCLUDES+= $(SIMDE_INCLUDES)
+endif
 endif
 
 CXXFLAGS=	-DSORT_PAIRS -DENABLE_PREFETCH -DBWA_OTHER_ELE=0 -O3 -std=c++11 -fopenmp $(ARCH_FLAGS) #-mtune=native -march=native
 #VTUNE_HOME= /opt/intel/oneapi/vtune/2021.1.1
-INCLUDES=
 LIBS=		-fopenmp -lz -ldl
 
 ifneq ($(VTUNE_HOME),)
