@@ -4,14 +4,14 @@
 	branch = master
 [submodule "tools/GKL"]
 	path = tools/GKL
-	url = https://github.com/arun-sub/GKL.git
+	url = https://github.com/dslarm/GKL
 	branch = pv_c_interface
 [submodule "tools/bwa-mem2"]
 	path = tools/bwa-mem2
-	url = https://github.com/bwa-mem2/bwa-mem2.git
+	url = https://github.com/dslarm/bwa-mem2
 [submodule "tools/minimap2"]
 	path = tools/minimap2
-	url = https://github.com/arun-sub/minimap2.git
+	url = https://github.com/dslarm/minimap2.git
 [submodule "tools/minimap2-acceleration"]
 	path = tools/minimap2-acceleration
 	url = https://github.com/arun-sub/minimap2-acceleration.git
