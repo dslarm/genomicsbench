@@ -1,6 +1,5 @@
 #!/bin/bash
 
-set -e
 
 usage() {
 	echo -e "\n Usage $0 <INPUTS_DIR> <INPUT_SIZE>\n\n Example: $0 [../input-datasets] [small | large]\n"

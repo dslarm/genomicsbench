@@ -20,7 +20,7 @@
 #include "spoa/spoa.hpp"
 #include "spoa/graph.hpp"
 #include "spoa/alignment_engine.hpp"
-#include <x86intrin.h>
+//#include <x86intrin.h>
 
 
 // #define VTUNE_ANALYSIS 1
@@ -225,6 +225,10 @@ int main(int argc, char** argv) {
 
 #ifdef ENABLE_SORT
     std::sort(batches.begin(), batches.end(), SortBySize());
+#endif
+
+#ifdef __aarch64__
+#define __rdtsc() 0
 #endif
 
 #pragma omp parallel num_threads(numThreads)

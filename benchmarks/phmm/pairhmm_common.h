@@ -4,7 +4,12 @@
 #if defined(_MSC_VER)
   #include <intrin.h> // SIMD intrinsics for Windows
 #else
+#ifndef __aarch64__
   #include <x86intrin.h> // SIMD intrinsics for GCC
+#else
+#define SIMDE_ENABLE_NATIVE_ALIASES
+#include <simde/x86/sse.h>
+#endif
 #endif
 
 #include <assert.h>

@@ -22,6 +22,8 @@ OBJECTS = $(SOURCES:$(SRC_PATH)/%.$(SRC_EXT)=$(BUILD_PATH)/%.o)
 # Set the dependency files that will be used to add header dependencies
 DEPS = $(OBJECTS:.o=.d)
 
+uname_arch := $(shell uname -m)
+
 
 ARCH_FLAGS=	-msse4.1
 

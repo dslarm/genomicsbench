@@ -6,6 +6,16 @@ MKLROOT=/opt/intel/oneapi/mkl/2021.1.1
 MKL_IOMP5_DIR=/opt/intel/oneapi/compiler/2021.1.2/linux/compiler/lib/intel64_lin
 CUDA_LIB=/usr/local/cuda
 
+
+uname_arch := $(shell uname -m)
+
+
+
+ifeq ($(uname_arch),aarch64)
+MINIMAP_FLAGS=arm_neon=1 aarch64=1 -f Makefile.simde CFLAGS='-O3 -mcpu=native -g'
+endif
+
+
 .PHONY: clean
 
 all:
@@ -17,7 +27,7 @@ all:
 	cd benchmarks/dbg; $(MAKE) CXX=$(CXX) arch=$(ARCH) VTUNE_HOME=$(VTUNE_HOME)
 	cd tools/GKL; ./gradlew test
 	cd benchmarks/phmm; $(MAKE) CC=$(CC) arch=$(ARCH) VTUNE_HOME=$(VTUNE_HOME)
-	cd tools/minimap2; $(MAKE)
+	cd tools/minimap2; $(MAKE) $(MINIMAP_FLAGS)
 	cd benchmarks/chain; $(MAKE) CXX=$(CXX) arch=$(ARCH) VTUNE_HOME=$(VTUNE_HOME)
 	cd tools/spoa; mkdir build; cd build; cmake -DCMAKE_BUILD_TYPE=Release ..; $(MAKE)
 	cd benchmarks/poa; $(MAKE) CXX=$(CXX) arch=$(ARCH) VTUNE_HOME=$(VTUNE_HOME)

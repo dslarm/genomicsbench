@@ -30,7 +30,14 @@
 #include <fstream>
 #include <vector>
 #include <string.h>
+#ifndef __aarch64__
 #include <xmmintrin.h>
+#else
+#define SIMDE_ENABLE_NATIVE_ALIASES
+#include <simde/x86/sse.h>
+#define _mm_malloc(size, align) aligned_alloc(align, size)
+#define _mm_free free
+#endif
 #include <algorithm>
 #include <functional>
 #include "pairhmm_common.h"
