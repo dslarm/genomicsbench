@@ -57,7 +57,12 @@ else ifeq ($(arch),avx512)
 		ARCH_FLAGS=-mavx512bw
 	endif
 else ifeq ($(arch),native)
-		ARCH_FLAGS=-march=native
+        ifeq ($(uname_arch),aarch64)
+                ARCH_FLAGS=-march=native $(SIMDE_ARCH_FLAGS)
+                INCLUDES+= $(SIMDE_INCLUDES)
+        else
+                ARCH_FLAGS=-march=native
+        endif
 else ifneq ($(arch),)
 # To provide a different architecture flag like -march=core-avx2 or  -march=armv8.2-a
         ifeq ($(uname_arch),aarch64)
