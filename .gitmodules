@@ -1,6 +1,6 @@
 [submodule "tools/bwa"]
 	path = tools/bwa
-	url = https://github.com/arun-sub/bwa.git
+	url = https://github.com/dslarm/bwa.git
 	branch = master
 [submodule "tools/GKL"]
 	path = tools/GKL
