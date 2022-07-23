@@ -183,8 +183,8 @@ int main(int argc, char** argv) {
         std::cout << USAGE_MESSAGE;
         exit(EXIT_FAILURE);
     }
-    for (char c; (c = getopt_long(argc, argv, shortopts, longopts, NULL)) != -1;) {
-        switch (c) {
+    for (int c; (c = getopt_long(argc, argv, shortopts, longopts, NULL)) != -1;) {
+      switch ((char)c) {
             case 'f': opt::testfile = optarg; break;
             case 'l': opt::loop = stoi(optarg); break;
             case 't': opt::nThreads = stoi(optarg); break;
