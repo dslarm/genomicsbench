@@ -20,8 +20,9 @@
 #include "spoa/spoa.hpp"
 #include "spoa/graph.hpp"
 #include "spoa/alignment_engine.hpp"
-//#include <x86intrin.h>
-
+#ifndef __aarch64__
+#include <x86intrin.h>
+#endif
 
 // #define VTUNE_ANALYSIS 1
 
