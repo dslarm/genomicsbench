@@ -167,9 +167,11 @@ int main(int argc, char** argv) {
         exit(EXIT_FAILURE);
     }
 
-    char opt, *s; int n_seqs = 0, numThreads = 1;
+    char c, *s; int n_seqs = 0, numThreads = 1;
+    int opt;
     while ((opt = getopt(argc, argv, "l:m:x:o:n:e:q:c:s:t:h")) != -1) {
-        switch (opt) {
+      c = (char) opt;
+      switch (opt) {
             case 'm': m = atoi(optarg); break;
             case 'x': x = 0-atoi(optarg); break;
             case 'o': o1 = 0-strtol(optarg, &s, 10); if (*s == ',') o2 = 0-strtol(s+1, &s, 10); break;
