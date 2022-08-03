@@ -1,9 +1,16 @@
 #!/bin/bash
 
 AMI=`curl http://169.254.169.254/latest/meta-data/instance-type`
+DATAMODE=$2
+
 
 timeit() {
-    /usr/bin/time -a -o ~/genomicsbench.csv  -f "$AMI,$1,%e\n" $* 
+    if [ $MODE == "profile" ]; then
+	$HOME/arm/forge/22.0.2/bin/map --profile $*
+    else
+	/usr/bin/time -a -o ~/genomicsbench.csv  -f "$AMI,$DATAMODE,$1,%e\n" $*
+    fi
+	
 }
 
 usage() {
