@@ -1,8 +1,9 @@
 #!/bin/bash
 
+AMI=`curl http://169.254.169.254/latest/meta-data/instance-type`
 
 timeit() {
-    /usr/bin/time -a -o ~/genomicsbench.csv  -f "$1,%e\n" $* 
+    /usr/bin/time -a -o ~/genomicsbench.csv  -f "$AMI,$1,%e\n" $* 
 }
 
 usage() {
