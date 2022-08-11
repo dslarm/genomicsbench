@@ -18,22 +18,55 @@ endif
 
 .PHONY: clean
 
-all:
-	$(info Starting build..this may take a while..)
+TARGETS=fmi bsw dbg phmm chain poa pileup
+all: $(TARGETS)
+
+htslib:
 	cd tools/htslib && autoreconf -i && ./configure && $(MAKE)
+
+bwa-mem2:
 	cd tools/bwa-mem2; $(MAKE) CXX=$(CXX) arch=$(ARCH) VTUNE_HOME=$(VTUNE_HOME)
+
+fmi:	bwa-mem2
 	cd benchmarks/fmi; $(MAKE) CXX=$(CXX) arch=$(ARCH) VTUNE_HOME=$(VTUNE_HOME)
+
+bsw:
 	cd benchmarks/bsw; $(MAKE) CXX=$(CXX) arch=$(ARCH) VTUNE_HOME=$(VTUNE_HOME)
+
+
+dbg:	htslib
 	cd benchmarks/dbg; $(MAKE) CXX=$(CXX) arch=$(ARCH) VTUNE_HOME=$(VTUNE_HOME)
+
+gkl:
 	cd tools/GKL; ./gradlew test
+
+phmm:	gkl
 	cd benchmarks/phmm; $(MAKE) CC=$(CC) arch=$(ARCH) VTUNE_HOME=$(VTUNE_HOME)
+
+minimap2:
 	cd tools/minimap2; $(MAKE) $(MINIMAP_FLAGS)
+
+chain:	minimap2
 	cd benchmarks/chain; $(MAKE) CXX=$(CXX) arch=$(ARCH) VTUNE_HOME=$(VTUNE_HOME)
+
+spoa:
 	cd tools/spoa; mkdir build; cd build; cmake -DCMAKE_BUILD_TYPE=Release ..; $(MAKE)
+
+poa:	spoa
 	cd benchmarks/poa; $(MAKE) CXX=$(CXX) arch=$(ARCH) VTUNE_HOME=$(VTUNE_HOME)
+
+
+pileup: htslib
 	cd benchmarks/pileup; $(MAKE) CC=$(CC) arch=$(ARCH) VTUNE_HOME=$(VTUNE_HOME)
+
+kmer-cnt:
 	cd benchmarks/kmer-cnt; $(MAKE) CXX=$(CXX) arch=$(ARCH) VTUNE_HOME=$(VTUNE_HOME)
+
+grm:	htslib
 #	cd benchmarks/grm/2.0/build_dynamic; $(MAKE) CC=$(CC) CXX=$(CXX) arch=$(ARCH) VTUNE_HOME=$(VTUNE_HOME) MKLROOT=$(MKLROOT) MKL_IOMP5_DIR=$(MKL_IOMP5_DIR) #needs MKL
+
+
+
 
 gpu:
 	cd benchmarks/abea; $(MAKE) CUDA_LIB=$(CUDA_LIB)
@@ -51,3 +84,5 @@ clean:
 	cd benchmarks/pileup; $(MAKE) clean
 	cd benchmarks/kmer-cnt; $(MAKE) clean
 	cd benchmarks/grm/2.0/build_dynamic; $(MAKE) clean
+
+
