@@ -25,7 +25,9 @@ htslib:
 	cd tools/htslib && autoreconf -i && ./configure && $(MAKE)
 
 bwa-mem2:
-	cd tools/bwa-mem2; $(MAKE) CXX=$(CXX) arch=$(ARCH) VTUNE_HOME=$(VTUNE_HOME)
+	cd tools/bwa-mem2
+	$(MAKE) -C ext/safestringlib directories libsafestring.a CXX=$(CXX) arch=$(ARCH) VTUNE_HOME=$(VTUNE_HOME)
+	$(MAKE) CXX=$(CXX) arch=$(ARCH) VTUNE_HOME=$(VTUNE_HOME)
 
 fmi:	bwa-mem2
 	cd benchmarks/fmi; $(MAKE) CXX=$(CXX) arch=$(ARCH) VTUNE_HOME=$(VTUNE_HOME)
