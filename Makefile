@@ -37,10 +37,10 @@ bsw:
 dbg:	htslib
 	cd benchmarks/dbg; $(MAKE) CXX=$(CXX) arch=$(ARCH) VTUNE_HOME=$(VTUNE_HOME)
 
-gkl:
-	cd tools/GKL; CFLAGS="-fPIC $(CFLAGS)" ./gradlew test
+gkl_phmm:
+	cd tools/GKL;  ./gradlew cmakeConfig ; make -C build/native/phmm 
 
-phmm:	gkl
+phmm:	gkl_phmm
 	cd benchmarks/phmm; $(MAKE) CC=$(CC) arch=$(ARCH) VTUNE_HOME=$(VTUNE_HOME)
 
 minimap2:
