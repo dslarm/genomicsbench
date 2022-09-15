@@ -44,7 +44,23 @@ BWAMEM2_PATH=../../tools/bwa-mem2
 INCLUDES=
 
 ifeq ($(arch),sse41)
-	ARCH_FLAGS=-msse4.1
+	ifeq ($(CXX), icpc)
+		ARCH_FLAGS=-msse4.1
+	else
+		ARCH_FLAGS=-msse -msse2 -msse3 -mssse3 -msse4.1
+	endif
+else ifeq ($(arch),sse42)
+	ifeq ($(CXX), icpc)	
+		ARCH_FLAGS=-msse4.2
+	else
+		ARCH_FLAGS=-msse -msse2 -msse3 -mssse3 -msse4.1 -msse4.2
+	endif
+else ifeq ($(arch),avx)
+	ifeq ($(CXX), icpc)
+		ARCH_FLAGS=-mavx ##-xAVX
+	else	
+		ARCH_FLAGS=-mavx
+	endif
 else ifeq ($(arch),avx2)
 	ifeq ($(CXX), icpc)
 		ARCH_FLAGS=-march=core-avx2 #-xCORE-AVX2
@@ -79,7 +95,7 @@ else
 endif
 endif
 
-CXXFLAGS=	-DSORT_PAIRS -DENABLE_PREFETCH -DBWA_OTHER_ELE=0 -O3 -std=c++11 -fopenmp $(ARCH_FLAGS) #-mtune=native -march=native
+CXXFLAGS+=	-g -O3 -fpermissive $(ARCH_FLAGS) -DSORT_PAIRS -DENABLE_PREFETCH -DBWA_OTHER_ELE=0 -std=c++11 -fopenmp 
 #VTUNE_HOME= /opt/intel/oneapi/vtune/2021.1.1
 LIBS=		-fopenmp -lz -ldl
 
