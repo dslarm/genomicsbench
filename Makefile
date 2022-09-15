@@ -38,7 +38,7 @@ dbg:	htslib
 	cd benchmarks/dbg; $(MAKE) CXX=$(CXX) arch=$(ARCH) VTUNE_HOME=$(VTUNE_HOME)
 
 gkl:
-	cd tools/GKL; CC="$(CC) -fPIC" CXX="$(CXX) -fPIC" ./gradlew test
+	cd tools/GKL; CFLAGS="-fPIC $(CFLAGS)" ./gradlew test
 
 phmm:	gkl
 	cd benchmarks/phmm; $(MAKE) CC=$(CC) arch=$(ARCH) VTUNE_HOME=$(VTUNE_HOME)
