@@ -26,9 +26,24 @@ uname_arch := $(shell uname -m)
 
 
 ARCH_FLAGS=	-msse4.1
-
 ifeq ($(arch),sse41)
-	ARCH_FLAGS=-msse4.1
+	ifeq ($(CXX), icpc)
+		ARCH_FLAGS=-msse4.1
+	else
+		ARCH_FLAGS=-msse -msse2 -msse3 -mssse3 -msse4.1
+	endif
+else ifeq ($(arch),sse42)
+	ifeq ($(CXX), icpc)	
+		ARCH_FLAGS=-msse4.2
+	else
+		ARCH_FLAGS=-msse -msse2 -msse3 -mssse3 -msse4.1 -msse4.2
+	endif
+else ifeq ($(arch),avx)
+	ifeq ($(CXX), icpc)
+		ARCH_FLAGS=-mavx ##-xAVX
+	else	
+		ARCH_FLAGS=-mavx
+	endif
 else ifeq ($(arch),avx2)
 	ifeq ($(CXX), icpc)
 		ARCH_FLAGS=-march=core-avx2 #-xCORE-AVX2
@@ -42,11 +57,27 @@ else ifeq ($(arch),avx512)
 		ARCH_FLAGS=-mavx512bw
 	endif
 else ifeq ($(arch),native)
-		ARCH_FLAGS=-march=native
+        ifeq ($(uname_arch),aarch64)
+                ARCH_FLAGS=-march=native $(SIMDE_ARCH_FLAGS)
+                INCLUDES+= $(SIMDE_INCLUDES)
+        else
+                ARCH_FLAGS=-march=native
+        endif
 else ifneq ($(arch),)
-	## To provide a different architecture flag like -march=core-avx2.
-		ARCH_FLAGS=$(arch)
+# To provide a different architecture flag like -march=core-avx2 or  -march=armv8.2-a
+        ifeq ($(uname_arch),aarch64)
+                ARCH_FLAGS=-march=$(arch) $(SIMDE_ARCH_FLAGS)
+                INCLUDES+= $(SIMDE_INCLUDES)
+        else
+		ARCH_FLAGS=-march=$(arch)
+	endif
+else
+        ifeq ($(uname_arch),aarch64)
+                ARCH_FLAGS=$(SIMDE_ARCH_FLAGS)
+                INCLUDES+= $(SIMDE_INCLUDES)
 endif
+endif
+
 
 # flags #
 #COMPILE_FLAGS = -std=c++11 -Wall -Wextra -g -O3 -fopenmp -xAVX2 -axAVX2
