@@ -50,7 +50,7 @@ chain:	minimap2
 	cd benchmarks/chain; $(MAKE) CXX=$(CXX)  VTUNE_HOME=$(VTUNE_HOME)
 
 spoa:
-	cd tools/spoa; mkdir build; cd build; cmake -DCMAKE_BUILD_TYPE=Release ..; $(MAKE)
+	cd tools/spoa; mkdir build; cd build; cmake -DCMAKE_BUILD_TYPE=Release -Dspoa_optimize_for_native=OFF ..; $(MAKE)
 
 poa:	spoa
 	cd benchmarks/poa; $(MAKE) CXX=$(CXX)  VTUNE_HOME=$(VTUNE_HOME)
