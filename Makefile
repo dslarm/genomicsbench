@@ -38,7 +38,7 @@ dbg:	htslib
 	cd benchmarks/dbg; $(MAKE) CXX=$(CXX)  VTUNE_HOME=$(VTUNE_HOME)
 
 gkl_phmm:
-	cd tools/GKL;  ./gradlew cmakeConfig && make -C build/native/src/main/native/pairhmm  && make -C build/native/src/main/native/pairhmm  install
+	cd tools/GKL;  ./gradlew cmakeConfig -Pcxx=$(CXX) -Pcc=$(CC) -Pcflags=$(CFLAGS) && make -C build/native/src/main/native/pairhmm  && make -C build/native/src/main/native/pairhmm  install
 
 phmm:	gkl_phmm
 	cd benchmarks/phmm; $(MAKE) CC=$(CC)  VTUNE_HOME=$(VTUNE_HOME)
