@@ -95,7 +95,7 @@ endif
 .SUFFIXES:.cpp .o
 
 .cpp.o:
-	$(CXX) -c $(CXXFLAGS) $(CPPFLAGS) $(INCLUDES) $< -o $@
+	$(CXX) -c $(CXXFLAGS) $(CPPFLAGS) $(INCLUDES) $(ARCH_FLAGS) $< -o $@
 
 all:$(EXE)
 
