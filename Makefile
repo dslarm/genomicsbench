@@ -76,6 +76,7 @@ clean:
 	cd benchmarks/fmi; $(MAKE) clean
 	cd benchmarks/bsw; $(MAKE) clean
 	cd benchmarks/dbg; $(MAKE) clean
+	cd tools/htslib; $(MAKE) clean
 	cd tools/GKL; ./gradlew clean
 	cd benchmarks/phmm; $(MAKE) clean
 	cd tools/minimap2; $(MAKE)
