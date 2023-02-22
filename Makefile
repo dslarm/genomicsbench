@@ -18,7 +18,7 @@ endif
 
 .PHONY: clean
 
-TARGETS=fmi bsw dbg phmm chain poa pileup 
+TARGETS=fmi bsw dbg phmm chain poa pileup kmer-cnt
 all: $(TARGETS)
 
 htslib:
