@@ -37,7 +37,10 @@ Authors: Vasimuddin Md <vasimuddin.md@intel.com>; Sanchit Misra <sanchit.misra@i
 #define __mmask8 uint8_t
 #define __mmask16 uint16_t
 #define __mmask32 uint32_t
+#define __mmask64 uint64_t
 #endif
+
+const __mmask64 dmask64 = 0xf0f0f0f0f0f0f0f0ull;
 
 // ------------------------------------------------------------------------------------
 // MACROs for vector code
@@ -3806,6 +3809,7 @@ void BandedPairWiseSW::smithWaterman128_16(uint16_t seq1SoA[],
     __m128i hval = _mm_load_si128((__m128i *)(H_v));
 
     __mmask16 dmask16 = 0xAAAA;
+
     
     __m128i maxScore128 = hval;
     for(j = 0; j < ncol; j++)
@@ -3878,8 +3882,16 @@ void BandedPairWiseSW::smithWaterman128_16(uint16_t seq1SoA[],
             __m128i cmp1 = _mm_cmpgt_epi16(head128, pj128);
             // uint32_t cval = _mm_movemask_epi16(cmp1);
             // uint16_t cval = _mm_movepi16_mask(cmp1);
-            uint16_t cval = _mm_movemask_epi8(cmp1) & dmask16;          /* TODO - 5% of runtime is here */
+
+#ifdef __aarch64__
+	    // shrn will turn 0b1010 (A) -> to 0xf0f0 
+	    uint8x8_t shrn =  vshrn_n_u16(vreinterpretq_u16_s64(cmp1), 4);
+	    uint64_t lval = ((uint64_t) shrn) & dmask64; 
+	    if (lval == 0x00) break;
+#else
+            uint16_t cval = _mm_movemask_epi8(cmp1) & dmask16;          
             if (cval == 0x00) break;
+#endif	  
             // __m128i cmp2 = _mm_cmpgt_epi16(pj128, tail128);
             __m128i cmp2 = _mm_cmpgt_epi16(j128, tail128);
             cmp1 = _mm_or_si128(cmp1, cmp2);
@@ -4051,11 +4063,21 @@ void BandedPairWiseSW::smithWaterman128_16(uint16_t seq1SoA[],
             tmp = _mm_cmpeq_epi16(tmp, zero128);
             // uint32_t val = _mm_movemask_epi16(tmp);
             // uint16_t val = _mm_movepi16_mask(tmp);
-            uint16_t val = _mm_movemask_epi8(tmp) & dmask16; /* TODO - 4% of runtime is here */
+#ifdef __aarch64__
+	    // shrn will turn 0b1010 (A) -> to 0xf0f0 
+	    uint8x8_t shrn =  vshrn_n_u16(vreinterpretq_u16_s64(tmp), 4);
+	    uint64_t lval = ((uint64_t) shrn) & dmask64; 
+	    if (lval == 0x00) break;
+#else
+            uint16_t val = _mm_movemask_epi8(tmp) & dmask16; 
             if (val == 0x00) {
                 break;
             }
-            tmp = _mm_and_si128(tmp,tmpb);
+#endif	  
+
+	    
+
+	    tmp = _mm_and_si128(tmp,tmpb);
             //__m128i l128 = _mm_set1_epi16(l+1);
             l128 = _mm_add_epi16(l128, one128);
             // NEW
@@ -4079,10 +4101,17 @@ void BandedPairWiseSW::smithWaterman128_16(uint16_t seq1SoA[],
             tmp = _mm_cmpeq_epi16(tmp, zero128);            
             // uint32_t val = _mm_movemask_epi16(tmp);
             // uint16_t val = _mm_movepi16_mask(tmp);
-            uint16_t val = _mm_movemask_epi8(tmp) & dmask16; /* TODO - 7% of runtime is here */
+#ifdef __aarch64__
+	    // shrn will turn 0b1010 (A) -> to 0xf0f0 
+	    uint8x8_t shrn =  vshrn_n_u16(vreinterpretq_u16_s64(tmp), 4);
+	    uint64_t lval = ((uint64_t) shrn) & dmask64; 
+	    if (lval == 0x00) break;
+#else
+            uint16_t val = _mm_movemask_epi8(tmp) & dmask16;
             if (val == 0x00)  {
                 break;
             }
+#endif
             tmp = _mm_and_si128(tmp,tmpb);
             l128 = _mm_sub_epi16(l128, one128);
             // NEW
