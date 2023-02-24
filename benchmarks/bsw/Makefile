@@ -95,7 +95,7 @@ else
 endif
 endif
 
-CXXFLAGS+=	-g -O3 -fpermissive $(ARCH_FLAGS) -DSORT_PAIRS -DENABLE_PREFETCH -DBWA_OTHER_ELE=0 -std=c++11 -fopenmp 
+override CXXFLAGS+=	-fpermissive $(ARCH_FLAGS) -DSORT_PAIRS -DENABLE_PREFETCH -DBWA_OTHER_ELE=0 -std=c++11 -fopenmp 
 #VTUNE_HOME= /opt/intel/oneapi/vtune/2021.1.1
 LIBS=		-fopenmp -lz -ldl
 
