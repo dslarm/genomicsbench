@@ -62,7 +62,7 @@ pileup: htslib
 kmer-cnt:
 	cd benchmarks/kmer-cnt; $(MAKE) CXX=$(CXX) VTUNE_HOME=$(VTUNE_HOME)
 
-grm:	htslib
+#grm:	htslib
 #	cd benchmarks/grm/2.0/build_dynamic; $(MAKE) CC=$(CC) CXX=$(CXX) arch=$(ARCH) VTUNE_HOME=$(VTUNE_HOME) MKLROOT=$(MKLROOT) MKL_IOMP5_DIR=$(MKL_IOMP5_DIR) #needs MKL
 
 
