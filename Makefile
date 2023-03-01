@@ -22,7 +22,7 @@ TARGETS=fmi bsw dbg phmm chain poa pileup kmer-cnt
 all: $(TARGETS)
 
 htslib:
-	cd tools/htslib && autoreconf -i && ./configure && $(MAKE)
+	cd tools/htslib && autoreconf -i && ./configure && $(MAKE) LDFLAGS="-fopenmp"
 
 bwa-mem2:
 	cd tools/bwa-mem2 ; $(MAKE) CC=$(CC) CXX=$(CXX) VTUNE_HOME=$(VTUNE_HOME)
