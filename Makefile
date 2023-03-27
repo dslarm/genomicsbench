@@ -25,7 +25,7 @@ htslib:
 	cd tools/htslib && autoreconf -i && ./configure && $(MAKE) LDFLAGS="-fopenmp"
 
 bwa-mem2:
-	cd tools/bwa-mem2 ; make -C ext/safestringlib directories libsafestring.a ; $(MAKE) CC=$(CC) CXX=$(CXX) VTUNE_HOME=$(VTUNE_HOME)
+	cd tools/bwa-mem2 ; make CC=gcc -C ext/safestringlib directories libsafestring.a ; $(MAKE) CC=$(CC) CXX=$(CXX) VTUNE_HOME=$(VTUNE_HOME)
 
 fmi:	bwa-mem2
 	cd benchmarks/fmi; $(MAKE) CXX=$(CXX) VTUNE_HOME=$(VTUNE_HOME)
