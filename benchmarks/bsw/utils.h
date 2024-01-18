@@ -57,12 +57,14 @@ static inline unsigned long long __rdtsc(void)
     return x;
 }
 #elif defined(__x86_64__)
+#if __GNUC__ < 11 
 static inline unsigned long long __rdtsc(void)
 {
     unsigned hi, lo;
     __asm__ __volatile__ ("rdtsc" : "=a"(lo), "=d"(hi));
     return ( (unsigned long long)lo)|( ((unsigned long long)hi)<<32 );
 }
+#endif
 // From https://github.com/google/benchmark/blob/37177a84b7e8d33696ea1e1854513cb0de3b4dc3/src/cycleclock.h
 // Apache 2.0 license
 #elif defined(__aarch64__)
