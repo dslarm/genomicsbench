@@ -38,7 +38,7 @@ ARCH_FLAGS=	-msse4.1
 uname_arch := $(shell uname -m)
 
 SSE2NEON_FLAGS=-D__SSE2__=1 -D__AVX__=1 -D__SSE4_1__=1
-SSE2NEON_INCLUDES=-Iext/sse2neon
+SSE2NEON_INCLUDES=-I../../tools/bwa-mem2/ext/sse2neon
 
 BWAMEM2_PATH=../../tools/bwa-mem2
 INCLUDES=
