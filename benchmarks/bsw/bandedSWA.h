@@ -37,7 +37,7 @@ Authors: Vasimuddin Md <vasimuddin.md@intel.com>; Sanchit Misra <sanchit.misra@i
 #include "macro.h"
 #include "utils.h"
 
- #ifndef __aarch64__
+#ifndef __aarch64__
 #if (__AVX512BW__ || __AVX2__)
 #include <immintrin.h>
 #else
@@ -46,10 +46,7 @@ Authors: Vasimuddin Md <vasimuddin.md@intel.com>; Sanchit Misra <sanchit.misra@i
 #define __mmask16 uint16_t
 #endif
 #else
-#define SIMDE_ENABLE_NATIVE_ALIASES
-#include <simde/x86/sse4.1.h>  // for SSE4.1
-#define __mmask8 uint8_t
-#define __mmask16 uint16_t
+#include <sse2neon.h>
 #define _mm_malloc(size, align) aligned_alloc(align, size)
 #define _mm_free free
 #endif
